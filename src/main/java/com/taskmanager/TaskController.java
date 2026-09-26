@@ -12,13 +12,13 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/tasks") // GET /tasks/5 → run getTask(5).
 
 public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
-    @GetMapping
+    @GetMapping // Get all tasks 
     public List<TaskResponseDTO> getAllTasks()
     {
         return taskRepository.findAll()
@@ -26,8 +26,9 @@ public class TaskController {
             .map(TaskResponseDTO::new)
             .collect(Collectors.toList());
     }
+    // curl http://localhost:8080/tasks
 
-    @PostMapping
+    @PostMapping // Add task - Just add the title of the task
     public TaskResponseDTO addTask (@Valid @RequestBody TaskRequestDTO request)
     {
         // return taskRepository.save(task);
@@ -35,9 +36,10 @@ public class TaskController {
         Task saved = taskRepository.save(task);
         return new TaskResponseDTO(saved);
     }
+    // curl -X POST http://localhost:8080/tasks -H "Content-Type: application/json" -d '{"title": "Study Spring Boot"}'
 
-    @GetMapping("/{id}")
-    public TaskResponseDTO getTask(@PathVariable int id)
+    @GetMapping("/{id}") // try to find a specific task via ID
+    public TaskResponseDTO getTask(@PathVariable int id)    
     {
         Task task = taskRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -45,8 +47,9 @@ public class TaskController {
         // return taskRepository.findById(id)
         //     .orElseThrow(() -> new RuntimeException("Task not found"));
     }
+    // curl http://localhost:8080/tasks/2
 
-    @PutMapping("/{id}/complete")
+    @PutMapping("/{id}/complete") // Transforming from "TODO" to "DONE" - Specify the ID
     public TaskResponseDTO completeTask(@PathVariable int id)
     {
         Task task = taskRepository.findById(id)
@@ -55,10 +58,12 @@ public class TaskController {
         Task saved = taskRepository.save(task);
         return new TaskResponseDTO(saved);
     }
+    // curl -X PUT http://localhost:8080/tasks/1/complete
 
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable int id)
     {
         taskRepository.deleteById(id);
     }
+    // curl -X DELETE http://localhost:8080/tasks/1
 }
