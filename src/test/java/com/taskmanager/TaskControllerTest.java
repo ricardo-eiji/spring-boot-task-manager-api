@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 
 // Goal: Write a unit test for TaskController (With the HTTP endpoints) 
 // using JUnit + Mockito, without hitting the real database
@@ -34,7 +35,7 @@ public class TaskControllerTest
         Task task = new Task("Study Java");
         Mockito.when(taskRepository.findAll()).thenReturn(List.of(task)); // Tells the fake repository: "When findAll() is called, pretend it returned this one task"
 
-        mockMvc.perform(get("/tasks"))
+        mockMvc.perform(get("/tasks").with(httpBasic("admin", "admin123")))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].title").value("Study Java"));
         // Simulates a GET /tasks request
@@ -53,6 +54,7 @@ public class TaskControllerTest
         // When save() is called with any Task, return our task
 
         mockMvc.perform(post("/tasks") // Simulates POST /tasks with a JSON body
+                .with(httpBasic("admin", "admin123"))
                 .contentType("application/json") // Tell the server we're sending JSON
                 .content("{\"title\": \"New Task\"}")) // Tell JSON data we're sending
             .andExpect(status().isOk()) // Expect HTTP 200 OK
@@ -66,7 +68,7 @@ public class TaskControllerTest
     {
         Mockito.when(taskRepository.findById(999)).thenReturn(java.util.Optional.empty());
 
-        mockMvc.perform(get("/tasks/999"))
+        mockMvc.perform(get("/tasks/999").with(httpBasic("admin", "admin123")))
             .andExpect(status().isNotFound());
 
         // Second test verifies your GlobalExceptionHandler 
