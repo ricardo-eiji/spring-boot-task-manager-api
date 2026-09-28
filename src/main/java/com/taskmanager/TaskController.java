@@ -14,6 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/tasks") // GET /tasks/5 → run getTask(5).
 
+// Responsible for the HTTP endpoints (Methods + URL)
+
 public class TaskController {
     @Autowired
     private TaskRepository taskRepository;

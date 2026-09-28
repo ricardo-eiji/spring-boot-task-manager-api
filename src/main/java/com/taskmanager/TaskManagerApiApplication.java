@@ -3,6 +3,8 @@ package com.taskmanager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+// The file that `TaskManagerApiApplication.java` is the `main` of Maven
+
 @SpringBootApplication
 public class TaskManagerApiApplication {
 

@@ -1,0 +1,30 @@
+
+# docker-compose to run app + database together
+# 'db' and 'app' are separate containers on the same Docker network — 
+# the 'app' connects to the database using the hostname 'db' (the service name), not localhost.
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: task_manager
+      POSTGRES_USER: taskuser
+      POSTGRES_PASSWORD: taskpass
+    ports:
+      - "5433:5432" # Instead of 5432:5432 to avoid conflict with local PostgreSQL
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    depends_on:
+      - db # 'app' connects to the database using the hostname 'db' (the service name), not localhost.
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/task_manager
+      SPRING_DATASOURCE_USERNAME: taskuser
+      SPRING_DATASOURCE_PASSWORD: taskpass
+
+volumes:
+  pgdata:
