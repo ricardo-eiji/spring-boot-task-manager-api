@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_DB: task_manager
       POSTGRES_USER: taskuser
-      POSTGRES_PASSWORD: taskpass
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5433:5432" # Instead of 5432:5432 to avoid conflict with local PostgreSQL
     volumes:
@@ -24,7 +24,8 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/task_manager
       SPRING_DATASOURCE_USERNAME: taskuser
-      SPRING_DATASOURCE_PASSWORD: taskpass
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD} # Reading .env file
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD} # Container will read SecurityConfig.java will read it via @Value("${ADMIN_PASSWORD}")
 
 volumes:
   pgdata:

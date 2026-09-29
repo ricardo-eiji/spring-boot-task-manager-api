@@ -9,10 +9,15 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 public class SecurityConfig
 {
+    @Value("${ADMIN_PASSWORD}")
+    private String adminPassword;
+    // then: .password(encoder.encode(adminPassword))
+
     @Bean
     public PasswordEncoder passwordEncoder()
     {
@@ -25,7 +30,7 @@ public class SecurityConfig
     {
         UserDetails user = User.builder()
             .username("admin")
-            .password(encoder.encode("admin123"))
+            .password(encoder.encode(adminPassword))
             .roles("USER")
             .build();
         return new InMemoryUserDetailsManager(user);
@@ -44,4 +49,5 @@ public class SecurityConfig
     }
     // SecurityFilterChain — defines the rule: every request must be authenticated, 
         // using basic auth
+
 }
