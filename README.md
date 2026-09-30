@@ -59,6 +59,7 @@ Example request body for `POST /tasks`:
 1. Copy the example environment file and set your own values:
    ```
    cp .env.example .env
+   # then open .env and replace the placeholder values
    ```
 2. Start the app and database together:
    ```
@@ -98,6 +99,9 @@ curl -u admin:admin123 -X POST http://localhost:8080/tasks \
 
 # List tasks
 curl -u admin:admin123 http://localhost:8080/tasks
+
+# The one we used without modifying the code: 
+curl -u admin:change_me http://localhost:8080/tasks
 
 # Mark a task complete
 curl -u admin:admin123 -X PUT http://localhost:8080/tasks/1/complete
