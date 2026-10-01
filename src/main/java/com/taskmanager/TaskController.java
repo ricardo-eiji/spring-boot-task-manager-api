@@ -62,6 +62,16 @@ public class TaskController {
     }
     // curl -X PUT http://localhost:8080/tasks/1/complete
 
+    @PutMapping("/{id}/undo")
+    public TaskResponseDTO undoTask(@PathVariable int id)
+    {
+        Task task = taskRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Task not found"));
+        task.setStatus(TaskStatus.TODO);
+        Task saved = taskRepository.save(task);
+        return new TaskResponseDTO(saved);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable int id)
     {
