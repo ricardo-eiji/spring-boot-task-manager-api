@@ -16,12 +16,18 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
+// This is the file that is related to expecting admin:admin123
+// The [@Value("${ADMIN_PASSWORD}")] is from .env
+// The line [auth.anyRequest().authenticated()] means every API request must provide those credentials 
+// These [.username("admin")] [.password(encoder.encode(adminPassword))] is where we define 
+
+
 @Configuration
 public class SecurityConfig
 {
-    @Value("${ADMIN_PASSWORD}")
+    @Value("${ADMIN_PASSWORD}") // This env var is from .env
     private String adminPassword;
-    // then: .password(encoder.encode(adminPassword))
+    // then: .password(encoder.encode(adminPassword)) - below
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource()
